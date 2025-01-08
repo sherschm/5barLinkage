@@ -22,11 +22,16 @@ Run the script:
 ```bash
 julia main.jl
 ```
-This can be run from VSCode, but make sure to add the Julia extension first.
+This can be run from VSCode, but make sure to add the Julia extension to VSCode first.
 
-This commented script runs through the model derivation and simulates the system's free response (no motor torque) from chosen initial conditions  
+This commented script runs through the model derivation making use of the Julia Symbolics.jl toolbox
+Then it simulates the unconstrained system's free response (no motor torque). This is just a swinging 4-link pendulum:
 
-<img src="./anims/rotary_pendulum_anim.gif" alt="response_gif" width="480"/> <img src="./plots/response.png" alt="pendulum response" width="350"/>
+ <img src="./plots/unconstrained_system.gif" alt="pendulum_response_gif" width="350"/>
+ 
+Then it simulates the constrained linkage system in response to chosen motor torques. 
+
+<img src="./plots/constrained_system.gif" alt="constrained_motion_gif" width="480"/>
 
 ## Next steps...
 - put in correct linkage parameters.
