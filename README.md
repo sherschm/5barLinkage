@@ -6,33 +6,25 @@ The derivation of the dynamic model is detailed in [the jpg.](./hand_derivation.
 Take a look at src/main.jl for the step by step implementation.
 
 ## Preliminaries
-[Install Julia](https://docs.julialang.org/en/v1/manual/installation/)
+- Install VSCode
 
-From a command prompt, run Julia
+- [Install Julia](https://docs.julialang.org/en/v1/manual/installation/)
 
-```bash
-julia
-```
+- Install the Julia extension in VSCode
 
-## To run the code from cmd prompt:
-Clone the repository and move to its directory.
+- Clone this repository and open the directory in VSCode.
 
-Run the script:
+- run main.jl from VSCode.
+This is a commented script that runs through the model derivation, making use of the Julia Symbolics.jl toolbox.
 
-```bash
-julia main.jl
-```
-This can be run from VSCode, but make sure to add the Julia extension to VSCode first.
-
-This commented script runs through the model derivation making use of the Julia Symbolics.jl toolbox
-Then it simulates the unconstrained system's free response (no motor torque). This is just a swinging 4-link pendulum:
+Then, it simulates the unconstrained system's free response (no motor torque). This is just a swinging 4-link pendulum:
 
  <img src="./plots/unconstrained_system.gif" alt="pendulum_response_gif" width="350"/>
  
-Then it simulates the constrained linkage system in response to chosen motor torque profile.
+Then, it simulates the constrained linkage system in response to chosen motor torque profile.
 
 <img src="./plots/constrained_system.gif" alt="constrained_motion_gif" width="480"/>
 
 ## Next steps...
 - put in correct linkage parameters.
-- Generate $[\dot{X}]$  data array. I think using Acausal filtering technique such as Savitzky Golay algorithm.
+- Generate $[\dot{X}]$  data array. I think a good option is to use an acausal filtering technique such as Savitzky Golay algorithm.
