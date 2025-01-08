@@ -19,7 +19,7 @@ function animate_q(θ_array,fps,name="anim")
         p=plot_robot(θ_array[i,:], l, c)
         plot(p)
     end
-    gif(anim,name*".gif",fps=fps);
+    gif(anim,"plots/"*name*".gif",fps=fps);
 end
 
 ##Function for interpolating a data matrix.

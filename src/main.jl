@@ -5,6 +5,8 @@ using DifferentialEquations
 using Plots
 using Interpolations
 import LinearAlgebra as LA
+using DelimitedFiles
+
 println("done!")
 
 # Define symbolic variables for joint angles, velocities, accelerations
@@ -95,7 +97,7 @@ tf=10
 q0=[initial_config;0;0;0;0]
 plot_robot(initial_config, l, c)
 
-#Simulate & animate unconstrained 4-link manipulator
+#Simulate & animate unconstrained 4-link manipulator, just for example
 tvec_out, θ_array, θdot_array=simulate_system(dynamics_uncoupled,q0,tf,Δt)
 animate_q(θ_array,1/Δt,"unconstrained_system")
 
@@ -103,22 +105,30 @@ animate_q(θ_array,1/Δt,"unconstrained_system")
 tvec_out, θ_array_constrained, θdot_array_constrained=simulate_system(dynamics_constrained,q0,tf,Δt)
 animate_q(θ_array_constrained,1/Δt,"constrained_system")
 
-#build output data arrays
+#build output data arrays for SINDy-Pi
 X=[θ_array_constrained θdot_array_constrained]
+#Xd can be calculated from X by acausal differentiation TBC!!
 
+#calculate the constraint forces and position throughout the simulation:
 constr_forces=Array{Float64}(undef,length(tvec_out),2)
-constr_position=Array{Float64}(undef,length(tvec_out),2) #this should be constant throughout!
+constr_position=Array{Float64}(undef,length(tvec_out),2) #this should be constant throughout, if there is drift then try increasing ODE solver precision.
 for i in 1:length(tvec_out)
     constr_position[i,:]=collect(forward_kinematics(X[i,1:4], l)[end])
     constr_forces[i,:]=calc_lagrange_multiplier(X[i,:],tvec_out[i],jacobian_f(X[i,1:4]),jacobian_derivative_f(X[i,:]))
 end
 
+# One solution to avoid "inverse M" appearing in SINDy-PI is to include the constraint forces in the control input array.
+# For experimental SysID with SINDy-PI, this would require force sensors to measure the constraint forces...
 U=[torq1.(tvec_out) torq2.(tvec_out) constr_forces]
 
-plot(constr_forces)
+writedlm("SINDyPI_data/U.csv",  U, ',')
+writedlm("SINDyPI_data/X.csv",  X, ',')
+writedlm("SINDyPI_data/tvec.csv",  tvec_out, ',')
 
-constraint_drift_check=plot(constr_position[:,1]) #should be constant!!
 
-U=[]
 
-plot(θ_array_constrained)
+#plot(constr_forces)
+
+#plot(constr_position[:,1]) #should be constant!!
+
+#plot(θ_array_constrained)
