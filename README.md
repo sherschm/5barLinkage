@@ -29,7 +29,7 @@ Then it simulates the unconstrained system's free response (no motor torque). Th
 
  <img src="./plots/unconstrained_system.gif" alt="pendulum_response_gif" width="350"/>
  
-Then it simulates the constrained linkage system in response to chosen motor torques. 
+Then it simulates the constrained linkage system in response to chosen motor torque profile.
 
 <img src="./plots/constrained_system.gif" alt="constrained_motion_gif" width="480"/>
 
