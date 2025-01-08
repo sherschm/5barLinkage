@@ -46,7 +46,7 @@ N_f=eval(build_function(nonlinear_vector,[θ;θd])[1])
 
 #choose control laws for joints 
 torq1(t)=2*sin(2*t)
-torq2(t)=2*sin(2*t)
+torq2(t)=2*sin(1.5*t)
 
 function calc_lagrange_multiplier(x,t,J,Jd)
     #compute Lagrange multipliers (see eq 6.6 from "A Mathematical Introduction to Robotic Manipulation" (Murray, Li & Sastry))
@@ -120,13 +120,14 @@ end
 # One solution to avoid "inverse M" appearing in SINDy-PI is to include the constraint forces in the control input array.
 # For experimental SysID with SINDy-PI, this would require force sensors to measure the constraint forces...
 U=[torq1.(tvec_out) torq2.(tvec_out) constr_forces]
+plot(U,label=["torq1" "torq2" "x" "y"],ylabel="Constraint force (N)",xlabel="Time (s)")
+savefig("plots/system_forces.png")
 
 #save data matrices to CSV files for SINDy-PI
 writedlm("SINDyPI_data/U.csv",  U, ',')
 writedlm("SINDyPI_data/X.csv",  X, ',')
 writedlm("SINDyPI_data/tvec.csv",  tvec_out, ',')
 
-#plot(constr_forces)
 
 #plot(constr_position[:,1]) #should be constant!!
 
