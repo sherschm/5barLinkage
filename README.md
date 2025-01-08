@@ -14,7 +14,7 @@ Take a look at src/main.jl for the step by step implementation.
 
 - Clone this repository and open the directory in VSCode.
 
-- run src/main.jl from VSCode.
+- run src/main.jl from VSCode. The first time may take a while due to importing required packages.
 This is a commented script that runs through the model derivation, making use of the Julia Symbolics.jl toolbox.
 
 Then, it simulates the unconstrained system's free response (no motor torque). This is just a swinging 4-link pendulum:
