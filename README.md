@@ -30,6 +30,11 @@ Then, it simulates the constrained linkage system in response to chosen motor to
 
 <img src="./plots/constrained_system.gif" alt="constrained_motion_gif" width="480"/>
 
+We can plot the input troques and constraint forces:
+
+<img src="./plots/system_forces.png" alt="constrained_motion_gif" width="480"/>
+
+
 ## Next steps...
 - put in correct linkage parameters.
 - Generate $[\dot{X}]$  data array. I think a good option is to use an acausal filtering technique such as Savitzky Golay algorithm.
