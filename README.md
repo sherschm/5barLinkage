@@ -1,8 +1,8 @@
 # 5barLinkage
 
-- This repository contains a Julia script that derives the nonlinear state-space equations of motion of a 5 bar linkage mechanism, actuated at its base.
+- This repository contains a Julia script that derives and simulates the nonlinear state-space equations of motion of a 5 bar linkage mechanism, actuated at its base. Aim is to output data to be used by SINDy-PI
 
-The derivation of the dynamic model is detailed in [the pdf.]()
+The derivation of the dynamic model is detailed in [the jpg.](./hand_derivation.jpg)
 Take a look at src/main.jl for the step by step implementation.
 
 ## Preliminaries
@@ -29,4 +29,5 @@ This commented script runs through the model derivation and simulates the system
 <img src="./anims/rotary_pendulum_anim.gif" alt="response_gif" width="480"/> <img src="./plots/response.png" alt="pendulum response" width="350"/>
 
 ## Next steps...
+- put in correct linkage parameters.
 - Generate $[\dot{X}]$  data array. I think using Acausal filtering technique such as Savitzky Golay algorithm.
