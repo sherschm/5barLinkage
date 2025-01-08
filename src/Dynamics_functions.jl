@@ -77,7 +77,7 @@ function extract_mass_matrix(eom, θdd)
     for i in 1:n
         for j in 1:n
             # Extract coefficient of θdd[j] from the i-th equation
-            D[i, j] = Symbolics.coeff(expand(simplify(expand(eom[i]))), θdd[j])
+            D[i, j] = Symbolics.coeff(expand(expand(eom[i])), θdd[j])
         end
     end
     return D

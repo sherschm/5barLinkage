@@ -15,16 +15,16 @@ println("done!")
 #define the system's constant parameters
 l=[0.2;0.2;0.2;0.2] #link lengths
 c=[0.5;0.5;0.5;0.5] #centre of mass of links as percentage of link lengths (0.5 means CoM is at midpoint of the link)
-m=[1;1;1;1] #mass of each link
-I=[0.001;0.001;0.001;0.001]  #moment of inertia of each link
-g=9.81;
+m=[0.1;0.1;0.1;0.1] #mass of each link
+I=[0.01;0.01;0.01;0.01]  #moment of inertia of each link
+g=9.81; #acceleration due to gravity
 
 #import necessary functions from other scripts
 include("Kinematic_functions.jl")
 include("Dynamics_functions.jl")
 include("Plot_functions.jl")
 
-initial_config=[pi/3;0.0;0;-pi/3] #choose some initial set of joint angles to calc base distance, L
+initial_config=[pi/3;0.0;0;-pi/3] #choose some initial set of joint angles to calculate a base distance, L
 L=forward_kinematics(initial_config, l)[end][1] #calc the base separation distance, L
 
 # Parameters for symbolic computation
@@ -38,7 +38,7 @@ eom = equations_of_motion(θ, θd, θdd, l, c, m, I, g)
 
 # Compute and display the mass matrix, and nonlinear terms (Coriolis & gravity forces)
 mass_matrix = extract_mass_matrix(eom, θdd)
-nonlinear_vector=simplify.(expand.(eom-expand.(mass_matrix*θdd))) 
+nonlinear_vector=expand.(expand.(eom)-expand.(mass_matrix)*θdd)
 
 #turn mass matrix and nonlinear vector into Julia functions.
 M_f=eval(build_function(mass_matrix,θ)[1])
@@ -54,9 +54,9 @@ function calc_lagrange_multiplier(x,t,J,Jd)
     θ=x[1:4]
     θd=x[5:8]
 
-    u=[torq1(t);0;0;torq2(t)]
+    τ =[torq1(t);0;0;torq2(t)]
 
-    return inv(J*inv(M_f(θ))*J')*(J*inv(M_f(θ))*(u-N_f(x))+Jd*θd)
+    return inv(J*inv(M_f(θ))*J')*(J*inv(M_f(θ))*(τ-N_f(x))+Jd*θd)
 end
 
 function dynamics_uncoupled(x,p,t)
@@ -121,11 +121,10 @@ end
 # For experimental SysID with SINDy-PI, this would require force sensors to measure the constraint forces...
 U=[torq1.(tvec_out) torq2.(tvec_out) constr_forces]
 
+#save data matrices to CSV files for SINDy-PI
 writedlm("SINDyPI_data/U.csv",  U, ',')
 writedlm("SINDyPI_data/X.csv",  X, ',')
 writedlm("SINDyPI_data/tvec.csv",  tvec_out, ',')
-
-
 
 #plot(constr_forces)
 
