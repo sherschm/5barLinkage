@@ -48,6 +48,21 @@ N_f=eval(build_function(nonlinear_vector,[θ;θd])[1])
 torq1(t)=2*sin(2*t)
 torq2(t)=2*sin(1.5*t)
 
+
+function dynamics_uncoupled(x,p,t)
+    ## This first order form equation describes the dynamics of a 4 link pendulum, free to swing.
+    ## this is quite chaotic since I have not included any damping terms in N_f.
+    θ=x[1:4]
+    θd=x[5:8]
+
+    #u=[torq1(t);0;0;torq2(t)]
+    u=[0;0;0;0] # no need to simulate control torques for this.. pendulum would go wild
+    
+    # Define first order form dynamics: xdot=f(x,u)
+    xd=[θd;inv(M_f(θ))*(u-N_f(x))] 
+    return xd
+end
+
 function calc_lagrange_multiplier(x,t,J,Jd)
     #compute Lagrange multipliers (see eq 6.6 from "A Mathematical Introduction to Robotic Manipulation" (Murray, Li & Sastry))
     #the lagrange multipliers will actually equal the constraint forces!
@@ -59,21 +74,8 @@ function calc_lagrange_multiplier(x,t,J,Jd)
     return inv(J*inv(M_f(θ))*J')*(J*inv(M_f(θ))*(τ-N_f(x))+Jd*θd)
 end
 
-function dynamics_uncoupled(x,p,t)
-    ## This basically describes the dynamics of a 4 bar linkage.
-    ## this is quite chaotic since I have not included any damping terms in N_f.
-    θ=x[1:4]
-    θd=x[5:8]
-
-    #u=[torq1(t);0;0;torq2(t)]
-    u=[0;0;0;0] # no need to simulate control torques for this.. pendulum would go wild
-    
-    xd=[θd;inv(M_f(θ))*(u-N_f(x))]
-    return xd
-end
-
 function dynamics_constrained(x,p,t)
-
+    #define dynamics of the constrained linkage
     θ=x[1:4]
     θd=x[5:8]
 
@@ -86,8 +88,8 @@ function dynamics_constrained(x,p,t)
     #compute Lagrange multipliers (see eq 6.6 from "A Mathematical Introduction to Robotic Manipulation" (Murray, Li & Sastry))
     LagMult=calc_lagrange_multiplier(x,t,J,Jd)
 
+    # Define first order form dynamics: xdot=f(x,u)
     xd=[θd;inv(M_f(θ))*(u-N_f(x)-J'*LagMult)]
-    
     return xd
 end
 
@@ -120,7 +122,11 @@ end
 # One solution to avoid "inverse M" appearing in SINDy-PI is to include the constraint forces in the control input array.
 # For experimental SysID with SINDy-PI, this would require force sensors to measure the constraint forces...
 U=[torq1.(tvec_out) torq2.(tvec_out) constr_forces]
-plot(U,label=["torq1" "torq2" "x" "y"],ylabel="Constraint force (N)",xlabel="Time (s)")
+
+#Plot forces
+p_tau=plot(tvec_out,U[:,1:2],label=["torq1" "torq2"],ylabel="Actuation torques (Nm)",xlabel="Time (s)")
+p_constr=plot(tvec_out,U[:,3:4],label=["Lambda_x" "Lambda_y"],ylabel="Constraint force (N)",xlabel="Time (s)")
+plot(p_tau,p_constr,layout=(1,2))
 savefig("plots/system_forces.png")
 
 #save data matrices to CSV files for SINDy-PI
