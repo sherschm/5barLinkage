@@ -6,6 +6,7 @@ using Plots
 using Interpolations
 import LinearAlgebra as LA
 using DelimitedFiles
+using LaTeXStrings
 
 println("done!")
 
@@ -123,9 +124,12 @@ end
 # For experimental SysID with SINDy-PI, this would require force sensors to measure the constraint forces...
 U=[torq1.(tvec_out) torq2.(tvec_out) constr_forces]
 
-#Plot forces
-p_tau=plot(tvec_out,U[:,1:2],label=["torq1" "torq2"],ylabel="Actuation torques (Nm)",xlabel="Time (s)")
-p_constr=plot(tvec_out,U[:,3:4],label=["Lambda_x" "Lambda_y"],ylabel="Constraint force (N)",xlabel="Time (s)")
+#Plot response / forces
+p_tau=plot(tvec_out,X[:,1:4],label=[L"\theta_1" L"\theta_2" L"\theta_3" L"\theta_4"],ylabel="Joint response (rad)",xlabel="Time (s)",linestyle=[:solid :dash :dashdot :dashdotdot],linewidth=2,legendfontsize=10)
+savefig("plots/system_response.png")
+
+p_tau=plot(tvec_out,U[:,1:2],label=[L"\tau_1" L"\tau_2"],ylabel="Actuation torques (Nm)",xlabel="Time (s)",linestyle=[:solid :dash],linewidth=2,legendfontsize=10)
+p_constr=plot(tvec_out,U[:,3:4],label=[L"\lambda_x" L"\lambda_y"],ylabel="Constraint force (N)",xlabel="Time (s)",linestyle=[:solid :dash],linewidth=2,legendfontsize=10)
 plot(p_tau,p_constr,layout=(1,2))
 savefig("plots/system_forces.png")
 

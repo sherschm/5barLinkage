@@ -30,9 +30,13 @@ Then, it simulates the constrained linkage system in response to chosen motor to
 
 <img src="./plots/constrained_system.gif" alt="constrained_motion_gif" width="480"/>
 
-We can plot the input troques and constraint forces:
+We can plot the system response:
 
-<img src="./plots/system_forces.png" alt="constrained_motion_gif" width="480"/>
+<img src="./plots/system_response.png" alt="response_plot" width="480"/>
+
+We can plot the input torques and constraint forces:
+
+<img src="./plots/system_forces.png" alt="forcing_plot" width="480"/>
 
 
 ## Next steps...
