@@ -7,6 +7,7 @@ using Interpolations
 import LinearAlgebra as LA
 using DelimitedFiles
 using LaTeXStrings
+using SavitzkyGolay
 
 println("done!")
 
@@ -14,7 +15,7 @@ println("done!")
 @variables t θ(t)[1:4] θd(t)[1:4] θdd(t)[1:4]
 
 #define the system's constant parameters
-l=[0.2;0.2;0.2;0.2] #link lengths
+l=[0.25;0.5;0.5;0.25] #link lengths
 c=[0.5;0.5;0.5;0.5] #centre of mass of links as percentage of link lengths (0.5 means CoM is at midpoint of the link)
 m=[0.1;0.1;0.1;0.1] #mass of each link
 I=[0.01;0.01;0.01;0.01]  #moment of inertia of each link
@@ -96,7 +97,7 @@ end
 
 #Define simulation parameters
 tf=10
-Δt=0.05 #you may want to reduce this! If you do, note Julia animations can only go up to a maximum fps of 
+Δt=0.001 #you may want to reduce this! If you do, note Julia animations can only go up to a maximum fps of 
 q0=[initial_config;0;0;0;0]
 plot_robot(initial_config, l, c)
 
@@ -133,9 +134,23 @@ p_constr=plot(tvec_out,U[:,3:4],label=[L"\lambda_x" L"\lambda_y"],ylabel="Constr
 plot(p_tau,p_constr,layout=(1,2))
 savefig("plots/system_forces.png")
 
+##Calculate Xdot array
+# SavitzyGolay parameters - These should be tuned!
+window_size = 11 
+poly_order =6
+
+Xdot=similar(X)
+Xdot[:,1:4]=X[:,5:8]
+for i in 5:8
+    Xdot[:,i]=savitzky_golay(X[:,i], window_size, poly_order, deriv=1, rate=1/Δt).y
+end
+plot(Xdot[:,5:8])
+
+
 #save data matrices to CSV files for SINDy-PI
 writedlm("SINDyPI_data/U.csv",  U, ',')
 writedlm("SINDyPI_data/X.csv",  X, ',')
+writedlm("SINDyPI_data/Xdot.csv",  Xdot, ',')
 writedlm("SINDyPI_data/tvec.csv",  tvec_out, ',')
 
 

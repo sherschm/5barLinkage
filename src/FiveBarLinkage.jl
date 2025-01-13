@@ -1,3 +1,4 @@
+__precompile__()
 module FiveBarLinkage
     #using Symbolics
     #using DifferentialEquations

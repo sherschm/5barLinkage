@@ -38,7 +38,7 @@ We can plot the input torques and constraint forces:
 
 <img src="./plots/system_forces.png" alt="forcing_plot" width="480"/>
 
+The data required for SINDy-PI is saved in the "SINDyPI_data" folder. Acceleration terms of Xdot is calculated from X using Savitzky-Golay filter
 
 ## Next steps...
 - put in correct linkage parameters.
-- Generate $[\dot{X}]$  data array. I think a good option is to use an acausal filtering technique such as Savitzky Golay algorithm.

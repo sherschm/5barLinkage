@@ -6,7 +6,8 @@ function plot_robot(θ, l, c)
     xs, ys = [p[1] for p in positions], [p[2] for p in positions]
 
     # Plot
-    plot(xs, ys, label="Manipulator", lw=2, color=:blue, marker=:circle, markersize=6,aspect_ratio=:equal,xlims=(-0.8,0.8),ylims=(-0.8,0.8))
+    wdth=sum(l)
+    plot(xs, ys, label="Manipulator", lw=2, color=:blue, marker=:circle, markersize=6,aspect_ratio=:equal,xlims=(-wdth,wdth),ylims=(-wdth,wdth))
     scatter!(xs, ys, label="Joints", color=:red)
     title!("Planar 4-Link Manipulator")
     xlabel!("X")
@@ -14,12 +15,23 @@ function plot_robot(θ, l, c)
 end
 
 function animate_q(θ_array,fps,name="anim")
+
+    if fps>25
+        N=size(θ_array,1)
+        frame_rate=25
+        tvec_in=(1/fps):(1/fps):(1/fps)*N
+        tvec_reduced=(1/frame_rate):(1/frame_rate):(1/fps)*N
+        θ_array=general_lin_interp(θ_array,tvec_in,tvec_reduced)
+    else
+        frame_rate=fps
+    end
+
     anim = @animate for i in 1:size(θ_array,1)
         plot()
         p=plot_robot(θ_array[i,:], l, c)
         plot(p)
     end
-    gif(anim,"plots/"*name*".gif",fps=fps);
+    gif(anim,"plots/"*name*".gif",fps=frame_rate);
 end
 
 ##Function for interpolating a data matrix.
