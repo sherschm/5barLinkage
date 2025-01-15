@@ -38,7 +38,7 @@ We can plot the input torques and constraint forces:
 
 <img src="./plots/system_forces.png" alt="forcing_plot" width="480"/>
 
-The data required for SINDy-PI is saved in the "SINDyPI_data" folder. Acceleration terms of $\dot{X}$ is calculated from $X$ using Savitzky-Golay filter, where: $X_i=[ \theta_{1_i} \\ \theta_{2_i} \\ \theta_{3_i} \\ \theta_{4_i} \\  \dot{\theta}_{1_i} \\ \dot{\theta}_{2_i} \\ \dot{\theta}_{3_i} \\ \dot{\theta}_{4_i}]$ :
+The data required for SINDy-PI is saved in the "SINDyPI_data" folder. Acceleration terms of $\dot{X}$ is calculated from $X$ using Savitzky-Golay filter, where: $X_i=[ \theta_{1_i} \\ \theta_{2_i} \\ \theta_{3_i} \\ \theta_{4_i} \\  \dot{\theta_{1_i}} \\ \dot{\theta_{2_i}} \\ \dot{\theta_{3_i}} \\ \dot{\theta_{4_i}}]$ :
 
 ## Next steps...
 - put in correct linkage parameters.
