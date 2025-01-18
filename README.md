@@ -40,7 +40,7 @@ We can plot the input torques and constraint forces:
 
 The data required for SINDy-PI is saved in the "SINDyPI_data" folder: $X_i=[ \theta_{1_i} \\ \theta_{2_i} \\ \theta_{3_i} \\ \theta_{4_i} \\  \dot{\theta_{1_i}} \\ \dot{\theta_{2_i}} \\ \dot{\theta_{3_i}} \\ \dot{\theta_{4_i}}]$.
 
-Acceleration terms of $\dot{X}$ is calculated from $X$ using Savitzky-Golay filter, where: 
+Acceleration terms of $\dot{X}$ is calculated from $X$ using Savitzky-Golay filter. This filter should work well for experimental phase too.
 
 Input terms $U_i = [\tau_{1_i} \\ \tau_{2_i} \\ \lambda_{x_i} \\ \lambda_{y_i}] $
 
